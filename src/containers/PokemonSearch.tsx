@@ -1,17 +1,29 @@
 import React, { Component, ChangeEvent } from 'react'
+import { connect } from 'react-redux';
+
+import { getPokemon } from '../actions';
+
 import SearchButton from './SearchButton';
 import SearchInput from './SearchInput';
 
-import SearchState from '../interfaces/SearchState.interface';
+import PokemonReducer from '../interfaces/PokemonReducer.interface';
 
-export class PokemonSearch extends Component<{}, SearchState> {
+interface Props {
+  getPokemon: any
+}
+
+interface SearchState {
+  searchInput: string
+}
+
+export class PokemonSearch extends Component<Props, SearchState> {
 
   state = {
     searchInput: ''
   }
 
   onSearchClick = (): void => {
-    
+    this.props.getPokemon(this.state.searchInput);
   }
 
   onChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -32,4 +44,12 @@ export class PokemonSearch extends Component<{}, SearchState> {
   }
 }
 
-export default PokemonSearch
+const mapDispatchToProps = ({
+  getPokemon
+});
+
+const mapStateToProps = (state: PokemonReducer) => ({
+  pokemon: state.pokemon
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PokemonSearch);
